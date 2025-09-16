@@ -15,8 +15,8 @@ class Persoo{
         "Hobbit",
         "Gobelin",
     ];
-    private const int PETIT_DES = 6;
-    private const int GRAND_DES = 12;
+    private const  PETIT_DES = 6;
+    private const  GRAND_DES = 12;
 
     // constructeur
     public function __construct(string $name, string $espece)

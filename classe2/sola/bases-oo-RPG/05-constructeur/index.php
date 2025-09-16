@@ -1,9 +1,15 @@
 <?php
+// Déxlaration du mode strict
 declare(strict_types=1);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 include "LaVoiture.php";
 ?>
+
 <!doctype html>
-<html lang="en">
+<html lang=fr>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -13,18 +19,19 @@ include "LaVoiture.php";
 </head>
 <body>
 <h1>Constructeur</h1>
-<p>La méthode public __construct() est méthode magique permettant de passer des arguments lors de l'instanciation d'une classe.</p>
-<?php
-if(LaVoiture::VOITURE_NEUVE===true){
-    echo "<h2>Voitures neuves</h2>";
-}
+<p>La méthode public __construct() est la méthode magique permettant de passer des arguments lors de l'instanciation d'une classe.</p>
+<pre>
+    <?php
+    if(LaVoiture::VOITURE_NEUVE === true){
+        echo "<h2>Voitures neuves</h2>";
+    }
+    $car1 = new LaVoiture("Mercedes", 2024, 333, "EQS");
+    $car2 = new LaVoiture("Volvo", 2015, 428, "EX30");
 
-$car1 = new LaVoiture("Mercedes",2024,333,"EQS");
-$car2 = new LaVoiture("Volvo",2015,428, "EX30");
-
-// constante privée
-//echo LaVoiture::MOTORISATION;
-var_dump($car1,$car2);
-?>
+    // Constante privée
+    // echo LaVoiture::MOTORISATION;
+    var_dump($car1, $car2);
+    ?>
+</pre>
 </body>
 </html>

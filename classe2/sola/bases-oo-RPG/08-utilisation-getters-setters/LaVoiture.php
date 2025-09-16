@@ -1,124 +1,95 @@
 <?php
-class LaVoiture
-{
-    // propriétés
+// Le nom de la classe doit être le même que celui du fichier
+// on, déclare une classe avec le mot clf "class{}".
+// Une classe par fichier
+
+class LaVoiture {
+    // Propriétés
     private ?string $marque = null;
     private ?int $annee_sortie = null;
-    private ?int $chevaux = null;
-    private ?string $model = null;
+    private ?int $nb_chevaux = null;
+    private ?string $modele = null;
 
-    // constantes ! typage autorisé depuis 8.3
-    public const bool VOITURE_NEUVE = true; // par défaut public
-    private const string MOTORISATION = "Essence";
+    // Constantes
+    public const VOITURE_NEUVE = true; // par défaut
+    public const NOS_MARQUES = ['Mercedes', 'Volvo', 'BMW', 'Fiat', 'Citroën'];
+    private const MOTORISATION = "Essence";
+
     // Méthodes
-    public const NOS_MARQUES =
-        [
-            'Mercedes',
-            'Volvo',
-            'BMW',
-            'Fiat',
-        ];
-
-    /* Le constructeur est une méthode publique
-    magique qui est appelée lors de l'instanciation
-    de la classe dans laquelle il se trouve (new)
-    */
-    public function __construct(string $laMarque, int $year, int $chevaux, string $model)
-    {
-        // utilisation des setters pour protéger
-        // les entrées lors de la création de l'instance
+    /* Le constructeur est une méthode publique magique qui est appelée lors de l'instanciation de la classe dans laquelle il se trouve (new). */
+    public function __construct(string $laMarque, int $year, int $nbChevaux, string $model) {
+        // Utilisation des setters pour protéger les entrées lors de la création de l'instance
         $this->setMarque($laMarque);
-        $this->setModel($model);
         $this->setAnneeSortie($year);
-        $this->setChevaux($chevaux);
+        $this->setNbChevaux($nbChevaux);
+        $this->setModele($model);
     }
 
-    // getter
+    // Getters
 
     // getMarque pour récupérer la marque
-    public function getMarque(): ?string
-    {
+    public function getMarque(): ?string {
         return $this->marque;
     }
 
-    //CHANGER le setter de LaMarque pour qu'il n'accepte
-    //que les marques dans le tableau self::NOS_MARQUES
-    public function setMarque(?string $laMarque): void
-    {
-        // si la marque est dans le tableau accepté
-        if(in_array($laMarque,self::NOS_MARQUES)){
-            $this->marque=$laMarque;
-        }else{
-            trigger_error("Instance numéro : ".spl_object_id($this)." Cette marque n'est pas acceptée !");
-        }
-
-    }
-
-    // getter getAnneeSortie()
-    public function getAnneeSortie(): ?int
-    {
+    // getAnneeSortie pour récupérer l'année de sortie
+    public function getAnneeSortie(): ?int {
         return $this->annee_sortie;
     }
 
-    // setter setAnneeSortie()
-    // entier positif
-    // EXE supérieur 1800
-    // EXE inférieur à l'année actuelle
-    /**
-     * @param int|null $annee_sortie
-     */
-    public function setAnneeSortie(int $annee_sortie): void
-    {
-        if($annee_sortie<1800){
-            trigger_error("Instance numéro : " . spl_object_id($this) . " Le champs ne peut dater d'avant 1800");
-        }elseif($annee_sortie> (int)date('Y')) {
-            trigger_error("Instance numéro : " . spl_object_id($this) . " Le champs ne peut dater de l'avenir");
+    // getNbChevaux pour récupérer le nombre de chevaux
+    public function getNbChevaux(): ?int {
+        return $this->nb_chevaux;
+    }
 
-        }else {
-            $this->annee_sortie = $annee_sortie;
+    // getModele pour récupérer le modèle
+    public function getModele(): ?string {
+        return $this->modele;
+    }
+
+    // Setters
+
+    // setMarque pour modifier la marque
+    public function setMarque(string $marque): void {
+        $traiteMarque = htmlspecialchars(strip_tags(trim($marque)));
+        if (!in_array($traiteMarque, self::NOS_MARQUES, true)) {
+            throw new InvalidArgumentException('Marque non autorisée.');
+        } else {
+            $this->marque = $marque;
         }
     }
 
-    public function getChevaux():?int
-    {
-        return $this->chevaux;
-    }
-    // EXE idem pour les $chevaux
-    // EXE minimum 50 maximum 1000
-
-    public function setChevaux(int $chevaux): void
-    {
-        if($chevaux<50){
-            trigger_error("Instance numéro : " . spl_object_id($this) . " Le champs doit êtr plus grand ou égal à 50");
-        }
-        elseif($chevaux>1000){
-            trigger_error("Instance numéro : " . spl_object_id($this) . " Le champs doit êtr plus petit ou égal à 1000");
-        }else {
-            $this->chevaux = $chevaux;
+    // setAnneeSortie pour modifier l'année de sortie
+    public function setAnneeSortie(int $year): void {
+        $yearMax = (int)date('Y');
+        if ($year < 1800 || $year > $yearMax) {
+            throw new InvalidArgumentException("L'année de sortie doit être comprise entre 1800 et $yearMax");
+        } else {
+            $this->annee_sortie = $year;
         }
     }
 
+    // setNbChevaux pour modifier le nombre de chevaux
+    public function setNbChevaux(int $nbChevaux): void {
+        if ($nbChevaux < 50 || $nbChevaux > 1000) {
+            throw new InvalidArgumentException("Le nombre de chevaux doit être compris entre 50 et 1000");
+        } else {
+            $this->nb_chevaux = $nbChevaux;
+        }
 
-    public function getModel():?string
-    {
-        return $this->model;
     }
 
-    public function setModel(string $model): void
-    {
-        // protection des champs
-        $model = htmlspecialchars(strip_tags(trim($model)));
-        // si vide
-        if($model==="") {
-            trigger_error("Instance numéro : " . spl_object_id($this) . " Le champs ne peut être vide");
-        }elseif(strlen($model)<3){
-            trigger_error("Instance numéro : " . spl_object_id($this) . " Le champs doit êtr plus grand ou égal à 3");
-        }elseif(strlen($model)>20){
-            trigger_error("Instance numéro : " . spl_object_id($this) . " Le champs doit êtr plus petit que 20");
-        }else{
-            $this->model=$model;
+    // setModele pour modifier le modèle
+    public function setModele(string $modele): void {
+        $traiteModele = htmlspecialchars(trim(strip_tags($modele)));
+        if ($traiteModele === "") {
+            throw new InvalidArgumentException("Le champ ne peut être vide.");
+        } else if (strlen($traiteModele) < 3) {
+            throw new InvalidArgumentException("La longueur doit être supérieure à 3");
+        } else if (strlen($traiteModele) > 20) {
+            throw new InvalidArgumentException("La longueur du modèle doit être inférieure à 20");
+        } else {
+            $this->modele = $traiteModele;
         }
     }
-
-
 }
